@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('image5')->nullable();
             $table->string('video')->nullable();
             $table->integer('goal');
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->date('time_limit');
             $table->timestamps();
         });

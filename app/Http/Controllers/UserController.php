@@ -15,35 +15,30 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
-        $credentials = $request->only('email', 'password');
-        
-        if (auth()->attempt($credentials)) {
-            $user = auth()->user();
-            
-            if ($user->role->name === 'admin') {
+
+        try {
+            $credentials = $request->only('email', 'password');
+
+            if (auth()->attempt($credentials)) {
+                $user = auth()->user();
+
                 $request->session()->regenerate();
                 return response()->json([
-                    'message' => 'Admin login successful', 
+                    'message' => ucfirst($user->role->name) . ' login successful', 
                     'user' => $user,
-                    'role' => 'admin'
+                    'role' => $user->role->name
                 ]);
-            } elseif ($user->role->name === 'user') {
-                $request->session()->regenerate();
-                return response()->json([
-                    'message' => 'User login successful', 
-                    'user' => $user,
-                    'role' => 'user'
-                ]);
-            } else {
-                auth()->logout();
-                return response()->json(['message' => 'Unauthorized access'], 403);
             }
+
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Login failed',
+                'error' => $e->getMessage()
+            ], 500);
         }
-    
-        return response()->json(['message' => 'Invalid credentials'], 401);
     }
-    
+
     public function register(Request $request)
     {
         $request->validate([
@@ -51,21 +46,21 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-    
-        $userRole = Role::where('name', 'user')->first();
-    
-        if (!$userRole) {
-            return response()->json(['message' => 'Default user role not found'], 500);
-        }
-    
+
         try {
+            $userRole = Role::where('name', 'user')->first();
+
+            if (!$userRole) {
+                return response()->json(['message' => 'Default user role not found'], 500);
+            }
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role_id' => $userRole->id, 
             ]);
-    
+
             return response()->json([
                 'message' => 'User registered successfully',
                 'user' => $user
@@ -77,13 +72,20 @@ class UserController extends Controller
             ], 500);
         }
     }
-    
+
     public function logout(Request $request)
     {
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-    
-        return response()->json(['message' => 'Logged out successfully']);
+        try {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return response()->json(['message' => 'Logged out successfully']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Logout failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

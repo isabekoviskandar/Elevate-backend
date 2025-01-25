@@ -81,7 +81,13 @@
                                 <p>Categories</p>
                             </a>
                         </li>
-                        <li class="nav-item {{ Request::is('/user') ? 'active' : '' }}">
+                        <li class="nav-item {{ Request::is('roles') ? 'active' : '' }}">
+                            <a href="/roles" wire:navigate>
+                                <i class="fas fa-list-ol"></i>
+                                <p>Roles</p>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ Request::is('users') ? 'active' : '' }}">
                           <a href="/users" wire:navigate>
                               <i class="fas fa-user"></i>
                               <p>Users</p>
