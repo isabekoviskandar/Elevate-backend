@@ -15,4 +15,9 @@ class Category extends Model
         'name',
         'is_active',
     ];
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

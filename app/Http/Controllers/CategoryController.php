@@ -11,12 +11,12 @@ class CategoryController extends Controller
     public function index()
     {
         $category = Category::all();
-        return view('admin.category.index', compact('category'));
+        return CategoryResource::collection($category);
     }
 
     public function create()
     {
-        return view('admin.category.create');
+        return view('admin.category.index');
     }
 
     public function store(Request $request)
@@ -25,16 +25,16 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories|max:255',
         ]);
 
-        Category::create([
+        $category = Category::create([
             'name' => $request->name,
         ]);
-        return redirect('/');
+        return response()->json($category);
     }
 
     public function edit($id)
     {
         $category = Category::find($id);
-        return view('admin.category.update', compact('category'));
+        return view('admin.category.index', compact('category'));
     }
 
     public function update(Request $request, $id)

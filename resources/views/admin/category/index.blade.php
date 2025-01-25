@@ -25,7 +25,7 @@
                                 <div class="form-group">
                                     <label>Name</label>
                                     <input type="text" wire:model="name" class="form-control"
-                                        placeholder="Yo'nalish nomini kiriting..">
+                                        placeholder="Enter the category name..">
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
