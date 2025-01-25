@@ -11,6 +11,6 @@ use Illuminate\Support\Facades\Route;
 //     return view('layouts.app');
 // });
 
-Route::get('/' , CategoryComponent::class);
-Route::get('/users' , UserComponent::class);
-Route::get('/roles' , RoleComponent::class);
+// Route::get('/' , CategoryComponent::class);
+// Route::get('/users' , UserComponent::class);
+// Route::get('/roles' , RoleComponent::class);
