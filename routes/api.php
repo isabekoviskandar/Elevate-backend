@@ -25,5 +25,4 @@ Route::delete('/project_delete/{id}', [ProjectController::class, 'destroy']);
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
-Route::get('/logout', [UserController::class, 'logout']);
-
+Route::post('/logout', [UserController::class, 'logout']);

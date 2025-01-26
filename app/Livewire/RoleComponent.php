@@ -18,21 +18,21 @@ class RoleComponent extends Component
     public function submit()
     {
         $this->validate([
-            'name' => 'required'
+            'name' => 'required|unique:roles'
         ]);
-
+    
         if ($this->editForm) {
             $this->role->update([
                 'name' => $this->name
             ]);
             session()->flash('message', 'Role updated successfully!');
         } else {
-            $this->role->create([
+            Role::create([
                 'name' => $this->name
             ]);
             session()->flash('message', 'Role created successfully!');
         }
-
+        
         $this->resetForm();
     }
 
